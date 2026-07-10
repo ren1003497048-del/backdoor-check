@@ -128,14 +128,14 @@ def run_selfcheck() -> int:
     print(rt_text)
     print()
     print("=== 脱敏验证 (J2) ===")
-    sample = 'ANTHROPIC_AUTH_TOKEN="0123456789abcdef0123456789abcdef.FakeSampleKeyNotReal" sk-proj-abc123XYZ'
+    sample = 'ANTHROPIC_AUTH_TOKEN="0123456789abcdef0123456789abcdef.FakeSampleKeyNotReal" sk-proj-A1b2C3d4E5f6G7h8I9j0K1l2M3n4'
     print("原始: %s" % sample)
     print("脱敏: %s" % _report.redact(sample))
     print()
     if static_ok and rt_ok:
-        print("结论: ✅ 自身安全验证通过(静态无外联 + 运行时守卫 + 脱敏生效)")
+        print("结论: PASS — 自身安全验证通过(静态无外联 + 运行时守卫 + 脱敏生效)")
         return 0
-    print("结论: 🚨 自身安全验证未通过")
+    print("结论: FAIL — 自身安全验证未通过")
     return 1
 
 

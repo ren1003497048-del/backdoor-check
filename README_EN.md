@@ -1,10 +1,10 @@
 # backdoor-check
 
-> Defending your right to know what your AI coding tools do — local-only, zero outbound, open-source.
+> Defending your right to know what your AI coding tools do — local-only, zero egress by default, open-source.
 
 English ｜ **[中文](README.md)**
 
-Detects whether AI coding tools and agents — Claude Code / Cursor / GitHub Copilot / Windsurf / Cline / Aider / Continue — contain mechanisms **worth your knowing**: undisclosed network egress, device fingerprinting, credential redirection, suspicious Hooks / MCP / plugin behavior, prompt steganography.
+Ships with complete Claude Code support first, and uses extensible adapters for Cursor / GitHub Copilot / Windsurf / Cline / Aider / Continue and other AI coding tools. It inspects mechanisms **worth your knowing**: undisclosed network egress, device fingerprinting, credential redirection, suspicious Hooks / MCP / plugin behavior, and prompt steganography.
 
 **It does not render a "yes/no backdoor" verdict for you. It surfaces the mechanisms, and lays them out for you to see.**
 
@@ -67,6 +67,13 @@ python3 scripts/check.py --verify-registry
 
 # 7. Audit dry-run (prints commands without executing them)
 python3 scripts/check.py --audit
+```
+
+If Windows PowerShell renders Chinese text or symbols incorrectly, run:
+
+```powershell
+$env:PYTHONUTF8 = "1"
+py scripts\check.py --self-check
 ```
 
 **Report severity:** 🚨 `crit` (backdoor signatures / credential leaks / arbitrary execution — act now) / ⚠️ `warn` (risk surface & hardening advice) / ✅ `pass` / ℹ️ `info`.
@@ -165,33 +172,29 @@ backdoor-check/
 
 ## Acknowledgments & Statement
 
-In late June 2026, a developer going by **Thereallo** uncovered the backdoor mechanism in Claude Code; before him, Reddit user **LegitMichel777** had already completed the decompilation. They found something unusual: this coding assistant, trusted by countless developers worldwide, would silently rewrite the system prompt it sent back to its own servers — swapping the hyphens in dates for slashes, and replacing the apostrophe in "Today's date is" with one of three Unicode characters indistinguishable to the human eye yet instantly legible to a machine. The trigger was a timezone (Asia/Shanghai, Asia/Urumqi), or a proxy address containing Chinese domains and AI labs; the domain list itself was hidden behind XOR (key 91) and base64. There was no disclosure at any point — no popup, no consent prompt, no mention in any release notes.
+### It began with a marker
 
-Thereallo wrote something we agree with entirely: **"This is not a malicious feature, but it is a weird choice for a developer tool that asks for trust."** Our thanks to them. Their findings and methods are both the reason this project exists and the method it uses: taking apart and exposing the inner mechanisms of these tools, to protect the rights of every ordinary user standing across from a hundred-billion-dollar giant.
+In June 2026, security researcher **Thereallo** published a reverse-engineering analysis of Claude Code. It described a path related to a custom `ANTHROPIC_BASE_URL` in which the client encoded environment signals into the system prompt: the date separator and the apostrophe in `Today's` remain almost indistinguishable in ordinary rendering, while still being machine-readable. The domain and keyword lists were further processed with XOR (key 91) and base64. The technical details are in [the original analysis](https://thereallo.dev/blog/claude-code-prompt-steganography).
 
----
+This is not evidence that every user was marked, nor a blanket verdict on any piece of software. The report shows that the path returns early when `ANTHROPIC_BASE_URL` is unset or points to the official API. That is why backdoor-check treats it as a **reproducible historical signature**: it applies to particular versions, configurations, and evidence—not panic in place of judgment.
 
-On June 30, 2026, Claude Code engineer **Thariq Shihipar** responded on X: this was "an experiment we launched in March that was meant to prevent account abuse from unauthorized resellers and protect against distillation"; the team already had stronger mitigations and had "actually been meaning to take this down for a while."
+We thank every researcher who turns a complicated mechanism into something others can review. This project inherits not only the question they raised, but their method: take things apart, explain them, and leave them open to challenge.
 
-We understand the concern about distillation. Training a frontier model is enormously expensive, and having its capabilities copied at scale is a loss no company wishes to bear; Anthropic has pointed to large numbers of fraudulent accounts running systematic distillation against Claude. The conflict of interest is real.
+### A legitimate aim does not replace transparency
 
-**But to understand is not to condone.**
+Model providers have reason to defend against account resale, abuse, and industrial-scale distillation. Anthropic has publicly described distillation campaigns involving fraudulent accounts and proxy services. [Its public account](https://www.anthropic.com/news/detecting-and-preventing-distillation-attacks?selectAccount=true) makes clear that this is a real conflict requiring real defenses.
 
-The criterion was set as timezone and geography — any device whose system clock pointed to China, or whose traffic passed through a Chinese network, was flagged by default as worth marking. Tens of millions of ordinary Chinese users like me were presumed guilty, without their knowledge — as if each one had come to feast on its fruits.
+But a legitimate goal does not remove the duty to explain the means. When a developer tool can already read projects, execute commands, and enter a workflow, users should not need reverse engineering to learn how their environment is being classified. Anti-abuse measures can be explicit policies, visible telemetry fields, and auditable rules; consequential signals should not be hidden in details ordinary people cannot reasonably see.
 
-Anthropic has always stood on safety: it places "frontier AI safety" at the center of its mission and holds "helpful, harmless, honest" as the creed its models keep. Yet this time, the "safety" it spoke of was its own — the safety of its models not being copied, its commercial interests not being eroded; the user's safety, the safety of knowing how one is being marked, categorized, and where one's data is sent, did not seem to figure in it at all. This suggests, at the very least, that the safety it emphasizes is a narrow one. It also suggests that when an AI giant is at once the rule-maker, the enforcer, and the interpreter, a certain inadvertence becomes, almost inevitably, structural arrogance — and its declarations on safety and transparency become, once again, hard to credit.
+### Knowing is a public relationship
 
----
+Technology is not only a collection of features. It also determines who sets the rules, who must accept the defaults, and who gets to explain them. As computational tools move deeper into work, creation, and public life, that asymmetry should not be treated as natural.
 
-I hold to a simple proposition: every user has the right to know how their information is collected, how it flows, and how it is treated. This should not depend on where you come from, nor on which company's tool you use.
+Our proposition is modest: every user has the right to know whether their environment is being collected, classified, or transmitted. That right should not depend on location, language, the size of an organization, or the company whose tool is in use.
 
-This is what backdoor-check sets out to do: a local tool for developers and individual users — runs purely locally, makes no outbound requests, redacts its reports, and depends on no third-party libraries; from the mechanism level — process behavior, network egress, static binary analysis, device fingerprinting, prompt steganography — it detects whether the mechanisms worth your knowing are present in your tools. It already covers Claude Code, and is designed to extend to Cursor, Copilot, Windsurf, Cline, Aider, Continue, and any AI coding tool you can name.
+This is the limited work backdoor-check takes on: run locally by default, redact reports first, keep dependencies minimal, and lower the cost of examining process behavior, network connections, configuration, supply-chain clues, device fingerprints, and prompt steganography. It does not appoint enemies or demand that you accept its verdict. It tries to make otherwise invisible mechanisms visible.
 
----
-
-Finally, we call on more people — researchers like Thereallo, and every ordinary user alike — to protect their own data rights while respecting the privacy of others, throughout their use of AI. These two things should never have been in conflict.
-
-AI should have made the world a better place, even if it wasn't at the moment. We are simultaneously facing the massive amount of false information it brings, the impact on employment, and a series of unresolved ethical problems. AI's bias does not come from thin air-Chatbot's narcissistic egotism, the widespread misogyny tendency in AIGC content, and technological supremacy are also some reflection of today's society.
+We welcome reproductions, corrections, new rules, and new adapters. We also welcome tool maintainers to challenge this project with clearer disclosure, smaller data-collection surfaces, and more auditable implementations. A tool worthy of trust should not fear being seen.
 
 ---
 
