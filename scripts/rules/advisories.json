@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "updated": "2026-07-09",
+  "note": "已知安全事件与受影响版本区间。A1 维度据此判定版本是否落在后门区间。规则不自动外联拉取,随技能发版更新。",
+  "advisories": [
+    {
+      "id": "nvdb-2026-07-08",
+      "title": "NVDB: Claude Code 内置监控机制未授权外联",
+      "source": "中国工信部国家漏洞库 NVDB / Reuters 2026-07-08",
+      "description": "Claude Code 内置监控机制,在用户不知情下将地理位置和身份相关标识符传输到远程服务器",
+      "tools": ["claude-code"],
+      "package": "@anthropic-ai/claude-code",
+      "affected_ranges": [{"gte": "2.1.91", "lte": "2.1.196"}],
+      "severity": "crit",
+      "keywords": ["telemetry", "geo", "fingerprint", "outbound", "location", "identity"],
+      "remediation": "升级到 2.1.197 以上版本(NVDB 称后门代码已在后续版本移除);并用 --mode deep 核查是否仍有未授权外联"
+    },
+    {
+      "id": "check-point-cfg-attack-2026",
+      "title": "Check Point: Claude Code 配置层攻击三载体",
+      "source": "Check Point Research / SecurityWeek 2026",
+      "description": "Hooks 任意命令执行(项目初始化自动运行)/ MCP 绕过审批 / API key 重定向(base_url 篡改窃取凭证)",
+      "tools": ["claude-code"],
+      "package": "@anthropic-ai/claude-code",
+      "affected_ranges": [],
+      "severity": "warn",
+      "keywords": ["hooks", "mcp", "base_url", "api_key", "permission_bypass"],
+      "remediation": "审查 hooks/MCP/base_url 配置来源,不信任随仓库克隆传播的配置"
+    },
+    {
+      "id": "claude-code-leak-2026-03",
+      "title": "Claude Code 源码泄露(npm 包被植入恶意软件)",
+      "source": "Zscaler ThreatLabz 2026-03",
+      "description": "源码经 npm 包暴露,被威胁者利用植入 Vidar 与 GhostSocks 恶意软件",
+      "tools": ["claude-code"],
+      "package": "@anthropic-ai/claude-code",
+      "affected_ranges": [],
+      "severity": "crit",
+      "keywords": ["supply_chain", "npm", "integrity", "malware", "vidar", "ghostsocks"],
+      "remediation": "用 --verify-registry 对照官方 registry 校验包完整性;核对安装包哈希"
+    },
+    {
+      "id": "claude-code-prompt-steganography-2026",
+      "title": "Thereallo 逆向: prompt steganography 后门(system prompt 隐写标记)",
+      "source": "thereallo.dev 2026-06-30 + Anthropic 工程师 Thariq Shihipar 确认",
+      "description": "按 base_url+时区触发,改 system prompt 的 Today's date 撇号(U+2019/02BC/02B9)和日期分隔符(- -> /),域名列表 XOR(91)+base64 混淆。标记随请求发给模型提供商。",
+      "tools": ["claude-code"],
+      "package": "@anthropic-ai/claude-code",
+      "affected_ranges": [{"gte": "2.1.91", "lte": "2.1.196"}],
+      "severity": "crit",
+      "keywords": ["steganography", "timezone", "apostrophe", "base_url", "xor"],
+      "remediation": "升级到 2.1.197+(2026-07-01 已移除);历史版本(2.1.91-2.1.196)用户若用中国代理+中国时区,请求已被标记"
+    }
+  ]
+}

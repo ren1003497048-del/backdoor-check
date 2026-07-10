@@ -1,0 +1,13 @@
+# 本机完整性基线(首次扫描自动生成,属本机状态,不应提交到仓库)
+scripts/baseline.json
+
+# 运行时捕获的 system prompt(含本机环境信息,不应提交)
+scripts/captured_prompt.json
+
+# 报告输出(使用 --out 时生成)
+*.report.json
+*.report.md
+
+# Python
+__pycache__/
+*.pyc

@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "updated": "2026-07-09",
+  "note": "设备指纹/身份收集签名。C2/C3 维度静态比对二进制 strings 与配置;C4 扫描二进制是否硬编码收集逻辑。命中=具备收集能力,结合是否外传升 crit。",
+  "identity_env_names": [
+    "USER", "LOGNAME", "HOME", "SUDO_USER", "USERNAME", "USERPROFILE",
+    "GIT_AUTHOR_EMAIL", "GIT_COMMITTER_EMAIL", "EMAIL",
+    "GITHUB_TOKEN", "GH_TOKEN", "GITLAB_TOKEN", "GL_TOKEN",
+    "AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_SESSION_TOKEN",
+    "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN",
+    "OPENAI_API_KEY",
+    "SSH_AUTH_SOCK", "SSH_CONNECTION",
+    "HOSTNAME", "HOST"
+  ],
+  "machine_id_indicators": {
+    "darwin": [
+      "IOPlatformUUID", "IOPlatformSerialNumber", "IOPlatformExpertDevice",
+      "system_profiler", "ioreg", "SPHardwareDataType", "HW_UUID"
+    ],
+    "linux": [
+      "/etc/machine-id", "/var/lib/dbus/machine-id", "machine-id",
+      "product_uuid", "/sys/class/net", "/sys/devices/virtual/dmi/id"
+    ],
+    "windows": [
+      "MachineGuid", "Win32_ComputerSystemProduct", "UUID",
+      "HKEY_LOCAL_MACHINE", "SOFTWARE\\Microsoft\\Cryptography"
+    ]
+  },
+  "location_indicators": [
+    "CoreLocation", "CLLocationManager", "GeoClue", "getLocation",
+    "geolocation", "GeoIP", "latitude", "longitude"
+  ],
+  "analytics_sdk_signatures": [
+    "collectTelemetry", "sendAnalytics", "trackEvent", "reportEvent",
+    "getMachineId", "getDeviceId", "fingerprint", "deviceFingerprint",
+    "sendStats", "reportMetrics", "telemetry", "sendBeacon",
+    "getClientId", "getSessionId", "userId", "deviceId"
+  ],
+  "steganography": {
+    "note": "prompt steganography 后门(Thereallo 逆向 2026-06-30)。I 维度据此做确定性检测。",
+    "timezone_triggers": ["Asia/Shanghai", "Asia/Urumqi"],
+    "lab_keywords": ["deepseek", "moonshot", "minimax", "zhipu", "baichuan", "stepfun", "01ai"],
+    "xor_key": 91,
+    "apostrophe_variants": ["’", "ʼ", "ʹ"],
+    "date_phrase": "Today's date is"
+  },
+  "user_profiling_indicators": {
+    "note": "用户定位/画像特征(可区分时区/语言/用户)。C5 扫描二进制引用,C6 评估本机暴露。zh_CN locale 比时区更精准、更难伪装。",
+    "locale": ["process.env.LANG", "LC_ALL", "LC_MESSAGES", "Intl.Locale", "systemLanguage", "preferredLanguages", "Accept-Language", "NSLocale", "AppleLocale"],
+    "host_user": ["os.hostname", "hostname", "computerName", "os.userInfo", "userInfo", "username", "USERPROFILE"],
+    "network": ["networkInterfaces", "getMacAddress", "MAC address", "GeoIP", "public-ip", "ifconfig.me"],
+    "timezone": ["timeZone", "resolvedOptions", "Intl.DateTimeFormat"]
+  }
+}

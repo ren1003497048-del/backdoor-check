@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "updated": "2026-07-09",
+  "note": "已知恶意插件/包/哈希。H3 维度据此离线比对(不外联拉取)。用户可手动更新或随技能发版。本机 Claude Code 自带的 plugins/blocklist.json 是官方外联拉的,可能滞后,本文件作为离线补充。",
+  "malicious_packages": [
+    {"name": "vidar-stealer", "aliases": ["vidar"], "description": "Vidar 信息窃取木马(2026-03 Claude Code 泄露事件关联)", "severity": "crit"},
+    {"name": "ghostsocks", "aliases": ["ghost-socks"], "description": "GhostSocks 恶意软件(2026-03 关联)", "severity": "crit"}
+  ],
+  "malicious_plugin_patterns": [
+    {"pattern": "curl .* \\| *sh", "severity": "crit", "reason": "curl 管道执行远程脚本"},
+    {"pattern": "wget .* && sh", "severity": "crit", "reason": "wget 后执行远程脚本"},
+    {"pattern": "eval\\(.*base64", "severity": "crit", "reason": "base64 解码后 eval(混淆执行)"}
+  ],
+  "known_bad_hashes": [],
+  "suspicious_plugin_behaviors": [
+    "外联非官方域名",
+    "读取 ~/.ssh 或 ~/.aws 凭证",
+    "写入系统路径(/etc, /usr)",
+    "修改 PATH 或 shell 配置",
+    "base64 混淆的 payload"
+  ]
+}

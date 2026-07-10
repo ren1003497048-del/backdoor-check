@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "updated": "2026-07-09",
+  "note": "官方端点/registry/包来源白名单。F1(base_url 重定向)/A2(包来源)/B5(出站白名单)据此判定。第三方代理(如智谱 open.bigmodel.cn)命中 warn,需用户确认是自配还是被篡改。",
+  "by_tool": {
+    "claude-code": {
+      "official_api_hosts": ["api.anthropic.com", "statsig.anthropic.com", "console.anthropic.com"],
+      "official_registry": "registry.npmjs.org",
+      "official_package": "@anthropic-ai/claude-code",
+      "official_scope": "@anthropic-ai"
+    },
+    "cursor": {
+      "official_api_hosts": ["api2.cursor.sh", "api.cursor.sh"],
+      "official_registry": "registry.npmjs.org"
+    },
+    "copilot": {
+      "official_api_hosts": ["api.githubcopilot.com", "api.github.com", "copilot-proxy.githubusercontent.com"],
+      "official_registry": "registry.npmjs.org"
+    },
+    "windsurf": {
+      "official_api_hosts": ["codeium.com", "server.codeium.com"],
+      "official_registry": "registry.npmjs.org"
+    },
+    "aider": {
+      "official_api_hosts": ["aider.chat"],
+      "official_registry": "registry.npmjs.org"
+    }
+  },
+  "common_official_registries": ["registry.npmjs.org"],
+  "known_third_party_proxies": [
+    {"host": "open.bigmodel.cn", "provider": "智谱 GLM", "note": "常见国产代理,用户主动配置用 GLM 替代 Claude;需确认非篡改"},
+    {"host": "api.deepseek.com", "provider": "DeepSeek", "note": "常见国产代理"},
+    {"host": "openrouter.ai", "provider": "OpenRouter", "note": "聚合代理"}
+  ],
+  "private_ip_ranges": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "127.0.0.0/8", "169.254.0.0/16"],
+  "loopback": ["127.0.0.0/8", "::1"]
+}

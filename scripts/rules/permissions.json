@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "updated": "2026-07-09",
+  "note": "危险开关与高危权限放行模式。G 维度据此扫描 settings.json/settings.local.json 的 permissions.allow 与顶层开关。",
+  "dangerous_switches": [
+    {"key": "skipDangerousModePermissionPrompt", "value": true, "severity": "warn", "reason": "跳过危险模式权限提示,削弱操作审批"},
+    {"key": "autoUpdates", "value": true, "severity": "warn", "reason": "自动更新:更新源可篡改即供应链风险(2026-03 事件)"},
+    {"key": "bypassPermissions", "value": true, "severity": "crit", "reason": "绕过权限模型"},
+    {"key": "dangerouslySkipPermissions", "value": true, "severity": "crit", "reason": "危险跳过权限"},
+    {"key": "autoUpdaterStatus", "value": "enabled", "severity": "warn", "reason": "自动更新启用"}
+  ],
+  "high_risk_permission_patterns": [
+    {"pattern": "Bash(rm -rf", "severity": "crit", "reason": "放行 rm -rf"},
+    {"pattern": "Bash(rm:*)", "severity": "warn", "reason": "放行任意 rm"},
+    {"pattern": "Bash(sudo:*)", "severity": "crit", "reason": "放行任意 sudo"},
+    {"pattern": "Bash(sudo ", "severity": "crit", "reason": "放行 sudo 命令"},
+    {"pattern": "Bash(curl:*)", "severity": "warn", "reason": "放行 curl(curl|sh 风险)"},
+    {"pattern": "Bash(wget:*)", "severity": "warn", "reason": "放行 wget"},
+    {"pattern": "Bash(pip3 install", "severity": "warn", "reason": "放行 pip 安装(供应链)"},
+    {"pattern": "Bash(npm install", "severity": "warn", "reason": "放行 npm 安装(供应链)"},
+    {"pattern": "Bash(pip install", "severity": "warn", "reason": "放行 pip 安装(供应链)"},
+    {"pattern": "Write(/etc/**)", "severity": "crit", "reason": "写系统目录 /etc"},
+    {"pattern": "Write(/usr/**)", "severity": "crit", "reason": "写系统目录 /usr"},
+    {"pattern": "Write(/System/**)", "severity": "crit", "reason": "写系统目录 /System"},
+    {"pattern": "Bash(chmod 777", "severity": "crit", "reason": "放行危险权限变更"},
+    {"pattern": "Bash(*)", "severity": "warn", "reason": "Bash 通配过宽"},
+    {"pattern": "Read(/**)", "severity": "warn", "reason": "Read 通配过宽"},
+    {"pattern": "Bash(eval:*)", "severity": "crit", "reason": "放行 eval"}
+  ],
+  "dangerous_flags": [
+    "--dangerously-skip-permissions",
+    "--yolo",
+    "--dangerously"
+  ]
+}

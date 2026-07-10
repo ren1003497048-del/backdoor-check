@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "updated": "2026-07-09",
+  "note": "已知遥测/分析/GeoIP 端点。B2 维度比对运行时外联目标,C4 维度比对二进制 strings。命中=具备遥测/指纹外传能力,需结合是否实际外联判定。",
+  "telemetry_endpoints": [
+    {"host": "sentry.io", "category": "error_reporting", "severity": "warn"},
+    {"host": "api.statsig.com", "category": "feature_flag_analytics", "severity": "warn"},
+    {"host": "statsig.anthropic.com", "category": "feature_flag", "severity": "warn"},
+    {"host": "amplitude.com", "category": "product_analytics", "severity": "warn"},
+    {"host": "api.amplitude.com", "category": "product_analytics", "severity": "warn"},
+    {"host": "segment.io", "category": "product_analytics", "severity": "warn"},
+    {"host": "api.segment.io", "category": "product_analytics", "severity": "warn"},
+    {"host": "datadoghq.com", "category": "monitoring", "severity": "warn"},
+    {"host": "browser-intake-datadoghq.com", "category": "monitoring", "severity": "warn"},
+    {"host": "o3185091.ingest.sentry.io", "category": "error_reporting", "severity": "warn"}
+  ],
+  "geoip_endpoints": [
+    {"host": "ip-api.com", "category": "geoip", "severity": "crit"},
+    {"host": "ipinfo.io", "category": "geoip", "severity": "crit"},
+    {"host": "maxmind.com", "category": "geoip", "severity": "crit"},
+    {"host": "freegeoip.app", "category": "geoip", "severity": "crit"},
+    {"host": "ipgeolocation.io", "category": "geoip", "severity": "crit"}
+  ],
+  "suspicious_patterns": [
+    {"pattern": "/track", "category": "tracking_endpoint", "severity": "warn"},
+    {"pattern": "/collect", "category": "tracking_endpoint", "severity": "warn"},
+    {"pattern": "/telemetry", "category": "telemetry_endpoint", "severity": "warn"},
+    {"pattern": "/analytics", "category": "analytics_endpoint", "severity": "warn"}
+  ]
+}
