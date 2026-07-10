@@ -191,7 +191,7 @@ This is what backdoor-check sets out to do: a local tool for developers and indi
 
 Finally, we call on more people — researchers like Thereallo, and every ordinary user alike — to protect their own data rights while respecting the privacy of others, throughout their use of AI. These two things should never have been in conflict.
 
-AI was supposed to make the world a little better. Even if, at this moment, it does not appear so. We face, all at once, the torrent of misinformation it brings, the shock to employment, and a string of ethical dilemmas yet unresolved. And the deeper reckoning may be this: AI did not invent prejudice out of thin air — the misogyny, the techno-supremacy, the narcissistic self-centeredness so commonly visible on it are merely the reflection of a shape our society already holds.
+AI should have made the world a better place, even if it wasn't at the moment. We are simultaneously facing the massive amount of false information it brings, the impact on employment, and a series of unresolved ethical problems. AI's bias does not come from thin air-Chatbot's narcissistic egotism, the widespread misogyny tendency in AIGC content, and technological supremacy are also some reflection of today's society.
 
 ---
 
